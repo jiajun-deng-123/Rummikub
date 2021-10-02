@@ -24,14 +24,12 @@ public class serverThread {
     }
 
     public void run() {
-        // TODO Auto-generated method stub
 
         try {
             ps=new PrintStream(socket.getOutputStream());
             ps.println("your id is:"+index);
 
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
 

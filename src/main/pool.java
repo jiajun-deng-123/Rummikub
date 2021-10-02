@@ -38,5 +38,9 @@ public class pool {
     public tile draw(){
         return pool.remove(0);
     }
+
+    public tile get(int i){
+        return pool.get(i);
+    }
 }
 

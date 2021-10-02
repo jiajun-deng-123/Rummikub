@@ -95,4 +95,12 @@ public class meld {
         }
         return m;
     }
+
+    public int getSize(){
+        return meld.size();
+    }
+
+    public tile getTile(int i){
+        return meld.get(i);
+    }
 }
