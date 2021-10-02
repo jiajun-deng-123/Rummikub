@@ -12,7 +12,6 @@ public class gameServer {
     public static pool p = new pool();
     public static LinkedList<meld> shareTable = new LinkedList<meld>();
     public static int handindex = 0;
-    public static int[] score;
     public static boolean[] isFirstHand;
     public static LinkedList<LinkedList<tile>> handcard = new LinkedList<LinkedList<tile>>();
     public static boolean isEnd = false;
@@ -30,11 +29,12 @@ public class gameServer {
             list.add(socket);
             serverThreadlist.add(new serverThread(socket, playerCount));
             serverThreadlist.get(playerCount - 1).run();
+            serverThreadlist.get(playerCount - 1).ps.println("You joined the game as Player " + playerCount);
             playerCount++;
         }
 
+
         for (int i = 0; i < 3; i++){
-            score[i] = 0;
             isFirstHand[i] = true;
         }
 
@@ -42,13 +42,14 @@ public class gameServer {
 
         while(!isEnd){
             firstMsg = true;
+            for (int i = 0; i < playerCount; i++){
+                serverThreadlist.get(i).ps.println(printTurn());
+            }
             serverThread st = serverThreadlist.get(handindex);
+            System.out.println(printTurn());
             while (!isTurnEnd) {
                 content = "";
-                System.out.println(printTurn());
                 content += "\n\n\n";
-                content += printTurn();
-                content += "\n\n";
                 content += printTable();
                 content += "\n\n";
                 content += printHandCard();
@@ -76,11 +77,7 @@ public class gameServer {
                         choice = st.readFromSocket();
                         addNewMeld(choice);
                     }else if (choice == "2"){
-                        st.ps.println("Please choose the meld that your want to move to: \n");
-                        int c1 = Integer.parseInt(st.readFromSocket()) - 1;
-                        st.ps.println("Please choose the tile your want to add (one tile only): \n");
-                        choice = st.readFromSocket();
-                        addOneMeld(choice, c1);
+                        isTurnEnd = true;
                     }else if (choice == "3"){
                         st.ps.println("Please choose the meld that your want to move from: \n");
                         int c1 = Integer.parseInt(st.readFromSocket()) - 1;
@@ -89,11 +86,14 @@ public class gameServer {
                         st.ps.println("Please choose the meld that your want to move to: \n");
                         int c2 = Integer.parseInt(st.readFromSocket()) - 1;
                         moveToMeld(choice, c1, c2);
-                    }else{
-
+                    }else if (choice == "4"){
+                        st.ps.println("Please choose the meld that your want to move to: \n");
+                        int c1 = Integer.parseInt(st.readFromSocket()) - 1;
+                        st.ps.println("Please choose the tile your want to add (one tile only): \n");
+                        choice = st.readFromSocket();
+                        addOneMeld(choice, c1);
                     }
                     checkEnd();
-                    isFirstHand[handindex] = false;
 
                 } else if (choice == "2") {
                     handcard.get(handindex).add(p.draw());
@@ -101,12 +101,20 @@ public class gameServer {
                 }
                 refreshTable();
             }
+            isFirstHand[handindex] = false;
             goNext();
         }
+
+        content = countScore();
+        for (int i = 0; i < playerCount; i++){
+            serverThreadlist.get(i).ps.println(content);
+        }
+
+        System.out.println(content);
     }
 
     public static String printTurn(){
-        return "Player " + (handindex + 1) + "'s turn";
+        return "\nPlayer " + (handindex + 1) + "'s turn\n";
     }
 
     public static String printTable(){
@@ -165,7 +173,7 @@ public class gameServer {
         if (isFirstHand[handindex]){
             string += "2) I am done and finish the turn\n";
         }else{
-            string += "2) Add new tile to a meld\n3) Move a tile from a meld\n4) I am done and finish the turn\n\n";
+            string += "2) I am done and finish the turn\n3) Move a tile from a meld\n4) Add new tile to a meld\n\n";
         }
         return string;
     }
@@ -248,6 +256,29 @@ public class gameServer {
                 shareTable.get(i).getTile(j).moved = false;
             }
         }
+    }
+
+    public static String countScore(){
+        int[] score = new int [playerCount];
+        String content = "Game over. Player ";
+        int winner = 1;
+        int finalScore = 0;
+        for (int i = 0; i < handcard.size(); i++){
+            if (handcard.get(i).size() == 0){
+                winner = i + 1;
+                content += winner + " is the winner of the game. \nFinal Score:\n";
+            }else{
+                for (int j = 0; j < handcard.get(i).size(); j++){
+                    score[i] -= handcard.get(i).get(j).point;
+                    finalScore += handcard.get(i).get(j).point;
+                }
+            }
+        }
+        score[winner - 1] = finalScore;
+        for (int i = 0; i < handcard.size(); i++){
+            content += "Player " + (i + 1) +" (" + score[i] + ")\n";
+        }
+        return content;
     }
 
 }

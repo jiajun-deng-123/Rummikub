@@ -11,11 +11,11 @@ class gameServerTest {
     public void testPrintTurn(){
         gameServer gs = new gameServer();
 
-        assertEquals("Player 1's turn", gs.printTurn());
+        assertEquals("\nPlayer 1's turn\n", gs.printTurn());
 
         gs.handindex = 1;
 
-        assertEquals("Player 2's turn", gs.printTurn());
+        assertEquals("\nPlayer 2's turn\n", gs.printTurn());
     }
 
     @Test
@@ -234,5 +234,35 @@ class gameServerTest {
         assertEquals("Your hand card:\n" +
                 "R2 R5 R1 R3 ", gs.printHandCard());
 
+    }
+
+    @Test
+    public void testCountScore(){
+        gameServer gs = new gameServer();
+        gs.playerCount = 3;
+        LinkedList<tile> hc1 = new LinkedList<tile>();
+        hc1.add(new tile("O5"));
+        hc1.add(new tile("R2"));
+        hc1.add(new tile("G3"));
+        gs.handcard.add(hc1);
+        LinkedList<tile> hc2 = new LinkedList<tile>();
+        gs.handcard.add(hc2);
+        LinkedList<tile> hc3 = new LinkedList<tile>();
+        hc3.add(new tile("B13"));
+        hc3.add(new tile("R2"));
+        hc3.add(new tile("O9"));
+        hc3.add(new tile("R4"));
+        hc3.add(new tile("G8"));
+        hc3.add(new tile("G12"));
+        hc3.add(new tile("B1"));
+        hc3.add(new tile("R4"));
+        hc3.add(new tile("O3"));
+        gs.handcard.add(hc3);
+
+        assertEquals("Game over. Player 2 is the winner of the game. \n" +
+                "Final Score:\n" +
+                "Player 1 (-10)\n" +
+                "Player 2 (66)\n" +
+                "Player 3 (-56)\n", gs.countScore());
     }
 }
