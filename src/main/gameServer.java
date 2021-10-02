@@ -76,6 +76,12 @@ public class gameServer {
                         choice = st.readFromSocket();
                         addNewMeld(choice);
                     }else if (choice == "2"){
+                        st.ps.println("Please choose the meld that your want to move to: \n");
+                        int c1 = Integer.parseInt(st.readFromSocket()) - 1;
+                        st.ps.println("Please choose the tile your want to add (one tile only): \n");
+                        choice = st.readFromSocket();
+                        addOneMeld(choice, c1);
+                    }else if (choice == "3"){
                         st.ps.println("Please choose the meld that your want to move from: \n");
                         int c1 = Integer.parseInt(st.readFromSocket()) - 1;
                         st.ps.println("Please choose the tile your want to move (one tile only): \n");
@@ -83,12 +89,11 @@ public class gameServer {
                         st.ps.println("Please choose the meld that your want to move to: \n");
                         int c2 = Integer.parseInt(st.readFromSocket()) - 1;
                         moveToMeld(choice, c1, c2);
-                    }else if (choice == "3"){
-
                     }else{
 
                     }
                     checkEnd();
+                    isFirstHand[handindex] = false;
 
                 } else if (choice == "2") {
                     handcard.get(handindex).add(p.draw());
@@ -160,7 +165,7 @@ public class gameServer {
         if (isFirstHand[handindex]){
             string += "2) I am done and finish the turn\n";
         }else{
-            string += "2) I am done and finish the turn\n3) Move a tile from a meld\n4) Add new tile to a meld\n\n";
+            string += "2) Add new tile to a meld\n3) Move a tile from a meld\n4) I am done and finish the turn\n\n";
         }
         return string;
     }
@@ -196,17 +201,44 @@ public class gameServer {
         return false;
     }
 
+    public static void addOneMeld(String choice, int m){
+        if (m > shareTable.size() - 1){
+            return;
+        }
+        String[] str = choice.split(" ");
+        tile t = new tile(str[0]);
+        boolean flag = false;
+        meld mc = shareTable.get(m).clone();
+        mc.addTile(t);
+        if (mc.isValid()){
+            flag = true;
+        }
+        if (flag) {
+            if (removeFromHand(t)){
+                t.played = true;
+                shareTable.get(m).addTile(t);
+            }
+        }
+    }
+
     public static void moveToMeld(String choice, int pm, int nm){
         if ((pm > shareTable.size() - 1) || (nm > shareTable.size() - 1) || pm == nm){
             return;
         }
         String[] str = choice.split(" ");
         tile t = new tile(str[0]);
-        if (shareTable.get(pm).moveTile(t)){
-            t.moved = true;
-            shareTable.get(nm).addTile(t);
+        boolean flag = false;
+        meld m = shareTable.get(nm).clone();
+        m.addTile(t);
+        if (m.isValid()){
+            flag = true;
         }
-
+        if (flag) {
+            if (shareTable.get(pm).moveTile(t)) {
+                t.moved = true;
+                shareTable.get(nm).addTile(t);
+            }
+        }
     }
 
     public static void refreshTable(){

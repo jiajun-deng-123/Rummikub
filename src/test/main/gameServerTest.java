@@ -131,13 +131,6 @@ class gameServerTest {
         assertEquals("Your hand card:\n" +
                 "R5 R5 R6 ", gs.printHandCard());
 
-        s = "R4 R5 R6";
-        gs.addNewMeld(s);
-
-        assertEquals("Melds on the table:\n" +
-                "*R1 *R2 *R3 ", gs.printTable());
-        assertEquals("Your hand card:\n" +
-                "R5 R5 R6 ", gs.printHandCard());
     }
 
     @Test
@@ -192,5 +185,54 @@ class gameServerTest {
 
         assertEquals("Melds on the table:\n" +
                 "R1 R2 R3 and B4 G4 O4 !R4 ", gs.printTable());
+
+        gs.moveToMeld("R3", 0, 1);
+
+        assertEquals("Melds on the table:\n" +
+                "R1 R2 R3 and B4 G4 O4 !R4 ", gs.printTable());
+    }
+
+    @Test
+    public void testAddOneMeld(){
+        gameServer gs = new gameServer();
+        LinkedList<tile> ts = new LinkedList<tile>();
+        ts.add(new tile("R5"));
+        ts.add(new tile("R2"));
+        ts.add(new tile("R5"));
+        ts.add(new tile("R1"));
+        ts.add(new tile("R6"));
+        ts.add(new tile("R3"));
+
+        meld m = new meld();
+
+        m.addTile(new tile("R1"));
+        m.addTile(new tile("R2"));
+        m.addTile(new tile("R3"));
+        m.addTile(new tile("R4"));
+
+        gs.handindex = 0;
+        gs.handcard.add(ts);
+        gs.shareTable.add(m);
+
+        assertEquals("Melds on the table:\n" +
+                "R1 R2 R3 R4 ", gs.printTable());
+        assertEquals("Your hand card:\n" +
+                "R5 R2 R5 R1 R6 R3 ", gs.printHandCard());
+
+        gs.addOneMeld("R5",0);
+
+        assertEquals("Melds on the table:\n" +
+                "R1 R2 R3 R4 *R5 ", gs.printTable());
+        assertEquals("Your hand card:\n" +
+                "R2 R5 R1 R6 R3 ", gs.printHandCard());
+
+        gs.addOneMeld("R6",0);
+        gs.addOneMeld("R7",0);
+
+        assertEquals("Melds on the table:\n" +
+                "R1 R2 R3 R4 *R5 *R6 ", gs.printTable());
+        assertEquals("Your hand card:\n" +
+                "R2 R5 R1 R3 ", gs.printHandCard());
+
     }
 }

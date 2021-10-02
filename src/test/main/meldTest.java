@@ -101,6 +101,18 @@ class meldTest {
         m1.addTile(new tile("B4"));
 
         assertFalse(m1.isValid());
+
+        meld m2 = new meld();
+        m2.addTile(new tile("B3"));
+        m2.addTile(new tile("R3"));
+        m2.addTile(new tile("G3"));
+
+        assertTrue(m2.isValid());
+
+
+        m1.addTile(new tile("B4"));
+
+        assertFalse(m1.isValid());
     }
 
     @Test

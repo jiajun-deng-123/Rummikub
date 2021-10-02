@@ -45,11 +45,6 @@ class ClientThread implements Runnable {
         try{
             while((content=br.readLine())!=null){
                 System.out.println(content);
-                if(content.startsWith("round")){
-                    String[] str=content.split(" ");
-
-                    //myClient.currentlast=new card(str[4]);
-                }
             }
         }
         catch(Exception e){
