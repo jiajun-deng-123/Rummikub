@@ -97,8 +97,22 @@ class meldTest {
 
         assertTrue(m1.isValid());
 
+
         m1.addTile(new tile("B4"));
 
         assertFalse(m1.isValid());
+    }
+
+    @Test
+    public void testClone(){
+        meld m1 = new meld();
+        m1.addTile(new tile("R1"));
+        m1.addTile(new tile("R2"));
+        m1.addTile(new tile("R3"));
+        m1.addTile(new tile("R4"));
+
+        meld m2 = m1.clone();
+
+        assertEquals("R1 R2 R3 R4 ", m2.toString());
     }
 }

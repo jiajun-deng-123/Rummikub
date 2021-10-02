@@ -87,4 +87,12 @@ public class meld {
         }
         return false;
     }
+
+    public meld clone(){
+        meld m = new meld();
+        for (int i = 0; i < meld.size(); i++){
+            m.addTile(meld.get(i));
+        }
+        return m;
+    }
 }
