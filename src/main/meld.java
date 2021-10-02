@@ -56,10 +56,8 @@ public class meld {
         for (int i = 0; i < meld.size(); i++){
             if (meld.get(i).moved){
                 string += "!";
-                meld.get(i).moved = false;
             }else if(meld.get(i).played){
                 string += "*";
-                meld.get(i).played = false;
             }
             string += meld.get(i).toString() + " ";
         }

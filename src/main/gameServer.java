@@ -15,7 +15,6 @@ public class gameServer {
     public static int[] score;
     public static boolean[] isFirstHand;
     public static LinkedList<LinkedList<tile>> handcard = new LinkedList<LinkedList<tile>>();
-    public static String lastplayer;
     public static boolean isEnd = false;
     public static boolean isTurnEnd = false;
 
@@ -73,38 +72,29 @@ public class gameServer {
                     st.ps.println(content);
                     choice = st.readFromSocket();
                     if (choice == "1") {
-                        st.ps.println("Please choose the tile your want to play and split them with space: \n");
-                        meld m = new meld();
+                        st.ps.println("Please choose the tiles your want to play and split them with space: \n");
                         choice = st.readFromSocket();
-                        String[] str = choice.split(" ");
-                        String[] tiles = Arrays.stream(str)
-                                .filter(value ->
-                                        value != null && value.length() > 0
-                                )
-                                .toArray(size -> new String[size]);
-                        for (int i = 0; i < tiles.length; i++){
-                            m.addTile(new tile(tiles[i]));
-                        }
-                        if (m.isValid()) {
-                            shareTable.add(m);
-                            for (int i = 0; i < m.getSize(); i++){
-                                removeFromHand(m.getTile(i));
-                            }
-                        }
+                        addNewMeld(choice);
                     }else if (choice == "2"){
-
+                        st.ps.println("Please choose the meld that your want to move from: \n");
+                        int c1 = Integer.parseInt(st.readFromSocket()) - 1;
+                        st.ps.println("Please choose the tile your want to move (one tile only): \n");
+                        choice = st.readFromSocket();
+                        st.ps.println("Please choose the meld that your want to move to: \n");
+                        int c2 = Integer.parseInt(st.readFromSocket()) - 1;
+                        moveToMeld(choice, c1, c2);
                     }else if (choice == "3"){
 
                     }else{
 
                     }
-                    st.ps.println(content);
+                    checkEnd();
 
                 } else if (choice == "2") {
                     handcard.get(handindex).add(p.draw());
                     isTurnEnd = true;
                 }
-                checkEnd();
+                refreshTable();
             }
             goNext();
         }
@@ -175,6 +165,27 @@ public class gameServer {
         return string;
     }
 
+    public static void addNewMeld(String choice){
+        meld m = new meld();
+        String[] str = choice.split(" ");
+        String[] tiles = Arrays.stream(str)
+                .filter(value ->
+                        value != null && value.length() > 0
+                )
+                .toArray(size -> new String[size]);
+        for (int i = 0; i < tiles.length; i++){
+            tile t = new tile(tiles[i]);
+            t.played = true;
+            m.addTile(t);
+        }
+        if (m.isValid()) {
+            shareTable.add(m);
+            for (int i = 0; i < m.getSize(); i++){
+                removeFromHand(m.getTile(i));
+            }
+        }
+    }
+
     public static boolean removeFromHand(tile t){
         for (int i = 0; i < handcard.get(handindex).size(); i++){
             if (t.color == handcard.get(handindex).get(i).color && t.point == handcard.get(handindex).get(i).point){
@@ -183,6 +194,28 @@ public class gameServer {
             }
         }
         return false;
+    }
+
+    public static void moveToMeld(String choice, int pm, int nm){
+        if ((pm > shareTable.size() - 1) || (nm > shareTable.size() - 1) || pm == nm){
+            return;
+        }
+        String[] str = choice.split(" ");
+        tile t = new tile(str[0]);
+        if (shareTable.get(pm).moveTile(t)){
+            t.moved = true;
+            shareTable.get(nm).addTile(t);
+        }
+
+    }
+
+    public static void refreshTable(){
+        for (int i = 0; i < shareTable.size(); i++){
+            for (int j = 0; j < shareTable.get(i).getSize(); j++){
+                shareTable.get(i).getTile(j).played = false;
+                shareTable.get(i).getTile(j).moved = false;
+            }
+        }
     }
 
 }

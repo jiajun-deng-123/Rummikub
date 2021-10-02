@@ -104,4 +104,93 @@ class gameServerTest {
         assertEquals("Your hand card:\n" +
                 "R5 R1 R6 ", gs.printHandCard());
     }
+
+    @Test
+    public void testAddMeld(){
+        gameServer gs = new gameServer();
+        LinkedList<tile> ts = new LinkedList<tile>();
+        ts.add(new tile("R5"));
+        ts.add(new tile("R2"));
+        ts.add(new tile("R5"));
+        ts.add(new tile("R1"));
+        ts.add(new tile("R6"));
+        ts.add(new tile("R3"));
+        gs.handindex = 0;
+        gs.handcard.add(ts);
+
+        String s = "R1 R2 R3";
+
+        assertEquals("Melds on the table:\n", gs.printTable());
+        assertEquals("Your hand card:\n" +
+                "R5 R2 R5 R1 R6 R3 ", gs.printHandCard());
+
+        gs.addNewMeld(s);
+
+        assertEquals("Melds on the table:\n" +
+                "*R1 *R2 *R3 ", gs.printTable());
+        assertEquals("Your hand card:\n" +
+                "R5 R5 R6 ", gs.printHandCard());
+
+        s = "R4 R5 R6";
+        gs.addNewMeld(s);
+
+        assertEquals("Melds on the table:\n" +
+                "*R1 *R2 *R3 ", gs.printTable());
+        assertEquals("Your hand card:\n" +
+                "R5 R5 R6 ", gs.printHandCard());
+    }
+
+    @Test
+    public void testRefreshTable(){
+        gameServer gs = new gameServer();
+        LinkedList<tile> ts = new LinkedList<tile>();
+        ts.add(new tile("R5"));
+        ts.add(new tile("R2"));
+        ts.add(new tile("R5"));
+        ts.add(new tile("R1"));
+        ts.add(new tile("R6"));
+        ts.add(new tile("R3"));
+        gs.handindex = 0;
+        gs.handcard.add(ts);
+
+        String s = "R1 R2 R3";
+
+        assertEquals("Melds on the table:\n", gs.printTable());
+
+        gs.addNewMeld(s);
+
+        assertEquals("Melds on the table:\n" +
+                "*R1 *R2 *R3 ", gs.printTable());
+
+        gs.refreshTable();
+        assertEquals("Melds on the table:\n" +
+                "R1 R2 R3 ", gs.printTable());
+    }
+
+    @Test
+    public void testMoveMeld(){
+        gameServer gs = new gameServer();
+        meld m1 = new meld();
+        meld m2 = new meld();
+
+        m1.addTile(new tile("R1"));
+        m1.addTile(new tile("R2"));
+        m1.addTile(new tile("R3"));
+        m1.addTile(new tile("R4"));
+
+        m2.addTile(new tile("B4"));
+        m2.addTile(new tile("O4"));
+        m2.addTile(new tile("G4"));
+
+        gs.shareTable.add(m1);
+        gs.shareTable.add(m2);
+
+        assertEquals("Melds on the table:\n" +
+                "R1 R2 R3 R4 and B4 G4 O4 ", gs.printTable());
+
+        gs.moveToMeld("R4", 0, 1);
+
+        assertEquals("Melds on the table:\n" +
+                "R1 R2 R3 and B4 G4 O4 !R4 ", gs.printTable());
+    }
 }
