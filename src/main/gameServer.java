@@ -97,7 +97,7 @@ public class gameServer {
                     checkEnd();
 
                 } else if (choice.equals("2")) {
-                    handcard.get(handindex).add(p.draw());
+                    drawOne();
                     isTurnEnd = true;
                 }
 
@@ -113,6 +113,10 @@ public class gameServer {
         }
 
         System.out.println(content);
+    }
+
+    public static void drawOne(){
+        handcard.get(handindex).add(p.draw());
     }
 
     public static String printTurn(){
