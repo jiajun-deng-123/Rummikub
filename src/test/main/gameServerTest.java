@@ -619,4 +619,303 @@ class gameServerTest {
                 "Player 3 (-48)\n", gs.countScore());
 
     }
+
+    @Test
+    public void testMeld1(){
+        gameServer gs = new gameServer();
+        gs.playerCount = 4;
+        gs.handindex = 0;
+        LinkedList<tile> hc1 = new LinkedList<tile>();
+        hc1.add(new tile("O11"));
+        hc1.add(new tile("O12"));
+        hc1.add(new tile("O13"));
+        hc1.add(new tile("B2"));
+        hc1.add(new tile("B3"));
+        hc1.add(new tile("B4"));
+        gs.handcard.add(hc1);
+        LinkedList<tile> hc2 = new LinkedList<tile>();
+        hc2.add(new tile("R11"));
+        hc2.add(new tile("R12"));
+        hc2.add(new tile("R13"));
+        gs.handcard.add(hc2);
+        LinkedList<tile> hc3 = new LinkedList<tile>();
+        hc3.add(new tile("B11"));
+        hc3.add(new tile("B12"));
+        hc3.add(new tile("B13"));
+        gs.handcard.add(hc3);
+
+        gs.addNewMeld("O11 O12 O13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("R11 R12 R13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("B11 B12 B13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+
+        gs.addNewMeld("B2 B3 B4");
+
+        assertEquals("Melds on the table:\n" +
+                "O11 O12 O13 and R11 R12 R13 and B11 B12 B13 and *B2 *B3 *B4 ", gs.printTable());
+    }
+
+    @Test
+    public void testMeld2(){
+        gameServer gs = new gameServer();
+        gs.playerCount = 4;
+        gs.handindex = 0;
+        LinkedList<tile> hc1 = new LinkedList<tile>();
+        hc1.add(new tile("O11"));
+        hc1.add(new tile("O12"));
+        hc1.add(new tile("O13"));
+        hc1.add(new tile("B2"));
+        hc1.add(new tile("B3"));
+        hc1.add(new tile("B4"));
+        hc1.add(new tile("G8"));
+        hc1.add(new tile("G9"));
+        hc1.add(new tile("G10"));
+        gs.handcard.add(hc1);
+        LinkedList<tile> hc2 = new LinkedList<tile>();
+        hc2.add(new tile("R11"));
+        hc2.add(new tile("R12"));
+        hc2.add(new tile("R13"));
+        gs.handcard.add(hc2);
+        LinkedList<tile> hc3 = new LinkedList<tile>();
+        hc3.add(new tile("B11"));
+        hc3.add(new tile("B12"));
+        hc3.add(new tile("B13"));
+        gs.handcard.add(hc3);
+
+        gs.addNewMeld("O11 O12 O13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("R11 R12 R13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("B11 B12 B13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+
+        gs.addNewMeld("B2 B3 B4");
+        gs.addNewMeld("G8 G9 G10");
+
+        assertEquals("Melds on the table:\n" +
+                "O11 O12 O13 and R11 R12 R13 and B11 B12 B13 and *B2 *B3 *B4 and *G8 *G9 *G10 ", gs.printTable());
+    }
+
+    @Test
+    public void testMeld3(){
+        gameServer gs = new gameServer();
+        gs.playerCount = 4;
+        gs.handindex = 0;
+        LinkedList<tile> hc1 = new LinkedList<tile>();
+        hc1.add(new tile("O11"));
+        hc1.add(new tile("O12"));
+        hc1.add(new tile("O13"));
+        hc1.add(new tile("B2"));
+        hc1.add(new tile("G2"));
+        hc1.add(new tile("O2"));
+        gs.handcard.add(hc1);
+        LinkedList<tile> hc2 = new LinkedList<tile>();
+        hc2.add(new tile("R11"));
+        hc2.add(new tile("R12"));
+        hc2.add(new tile("R13"));
+        gs.handcard.add(hc2);
+        LinkedList<tile> hc3 = new LinkedList<tile>();
+        hc3.add(new tile("B11"));
+        hc3.add(new tile("B12"));
+        hc3.add(new tile("B13"));
+        gs.handcard.add(hc3);
+
+        gs.addNewMeld("O11 O12 O13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("R11 R12 R13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("B11 B12 B13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+
+        gs.addNewMeld("B2 G2 O2");
+
+        assertEquals("Melds on the table:\n" +
+                "O11 O12 O13 and R11 R12 R13 and B11 B12 B13 and *B2 *G2 *O2 ", gs.printTable());
+    }
+
+    @Test
+    public void testMeld4(){
+        gameServer gs = new gameServer();
+        gs.playerCount = 4;
+        gs.handindex = 0;
+        LinkedList<tile> hc1 = new LinkedList<tile>();
+        hc1.add(new tile("O11"));
+        hc1.add(new tile("O12"));
+        hc1.add(new tile("O13"));
+        hc1.add(new tile("B2"));
+        hc1.add(new tile("G2"));
+        hc1.add(new tile("O2"));
+        hc1.add(new tile("B8"));
+        hc1.add(new tile("G8"));
+        hc1.add(new tile("O8"));
+        hc1.add(new tile("R8"));
+        gs.handcard.add(hc1);
+        LinkedList<tile> hc2 = new LinkedList<tile>();
+        hc2.add(new tile("R11"));
+        hc2.add(new tile("R12"));
+        hc2.add(new tile("R13"));
+        gs.handcard.add(hc2);
+        LinkedList<tile> hc3 = new LinkedList<tile>();
+        hc3.add(new tile("B11"));
+        hc3.add(new tile("B12"));
+        hc3.add(new tile("B13"));
+        gs.handcard.add(hc3);
+
+        gs.addNewMeld("O11 O12 O13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("R11 R12 R13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("B11 B12 B13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+
+        gs.addNewMeld("B2 G2 O2");
+        gs.addNewMeld("B8 G8 R8 O8");
+
+        assertEquals("Melds on the table:\n" +
+                "O11 O12 O13 and R11 R12 R13 and B11 B12 B13 and *B2 *G2 *O2 and *B8 *G8 *O8 *R8 ", gs.printTable());
+    }
+
+    @Test
+    public void testMeld5(){
+        gameServer gs = new gameServer();
+        gs.playerCount = 4;
+        gs.handindex = 0;
+        LinkedList<tile> hc1 = new LinkedList<tile>();
+        hc1.add(new tile("O11"));
+        hc1.add(new tile("O12"));
+        hc1.add(new tile("O13"));
+        hc1.add(new tile("B2"));
+        hc1.add(new tile("G2"));
+        hc1.add(new tile("O2"));
+        hc1.add(new tile("B8"));
+        hc1.add(new tile("B9"));
+        hc1.add(new tile("B10"));
+        gs.handcard.add(hc1);
+        LinkedList<tile> hc2 = new LinkedList<tile>();
+        hc2.add(new tile("R11"));
+        hc2.add(new tile("R12"));
+        hc2.add(new tile("R13"));
+        gs.handcard.add(hc2);
+        LinkedList<tile> hc3 = new LinkedList<tile>();
+        hc3.add(new tile("B11"));
+        hc3.add(new tile("B12"));
+        hc3.add(new tile("B13"));
+        gs.handcard.add(hc3);
+
+        gs.addNewMeld("O11 O12 O13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("R11 R12 R13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("B11 B12 B13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+
+        gs.addNewMeld("B2 G2 O2");
+        gs.addNewMeld("B8 B9 B10");
+
+        assertEquals("Melds on the table:\n" +
+                "O11 O12 O13 and R11 R12 R13 and B11 B12 B13 and *B2 *G2 *O2 and *B8 *B9 *B10 ", gs.printTable());
+    }
+
+    @Test
+    public void testMeld6(){
+        gameServer gs = new gameServer();
+        gs.playerCount = 4;
+        gs.handindex = 0;
+        LinkedList<tile> hc1 = new LinkedList<tile>();
+        hc1.add(new tile("O11"));
+        hc1.add(new tile("O12"));
+        hc1.add(new tile("O13"));
+        hc1.add(new tile("B2"));
+        hc1.add(new tile("G2"));
+        hc1.add(new tile("O2"));
+        hc1.add(new tile("B3"));
+        hc1.add(new tile("G3"));
+        hc1.add(new tile("O3"));
+        hc1.add(new tile("B8"));
+        hc1.add(new tile("B9"));
+        hc1.add(new tile("B10"));
+        hc1.add(new tile("B11"));
+        hc1.add(new tile("B12"));
+        gs.handcard.add(hc1);
+        LinkedList<tile> hc2 = new LinkedList<tile>();
+        hc2.add(new tile("R11"));
+        hc2.add(new tile("R12"));
+        hc2.add(new tile("R13"));
+        gs.handcard.add(hc2);
+        LinkedList<tile> hc3 = new LinkedList<tile>();
+        hc3.add(new tile("B11"));
+        hc3.add(new tile("B12"));
+        hc3.add(new tile("B13"));
+        gs.handcard.add(hc3);
+
+        gs.addNewMeld("O11 O12 O13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("R11 R12 R13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+        gs.addNewMeld("B11 B12 B13");
+
+        gs.goNext();
+        gs.refreshTable();
+
+
+        gs.addNewMeld("B2 G2 O2");
+        gs.addNewMeld("B3 G3 O3");
+        gs.addNewMeld("B8 B9 B10 B11 B12");
+
+        assertEquals("Melds on the table:\n" +
+                "O11 O12 O13 and R11 R12 R13 and B11 B12 B13 and *B2 *G2 *O2 and *B3 *G3 *O3 and *B8 *B9 *B10 *B11 *B12 ", gs.printTable());
+    }
 }
