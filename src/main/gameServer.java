@@ -12,7 +12,7 @@ public class gameServer {
     public static pool p = new pool();
     public static LinkedList<meld> shareTable = new LinkedList<meld>();
     public static int handindex = 0;
-    public static boolean[] isFirstHand;
+    public static boolean[] isFirstHand = new boolean[3];
     public static LinkedList<LinkedList<tile>> handcard = new LinkedList<LinkedList<tile>>();
     public static boolean isEnd = false;
     public static boolean isTurnEnd = false;
@@ -32,8 +32,9 @@ public class gameServer {
             serverThreadlist.get(playerCount - 1).ps.println("You joined the game as Player " + playerCount);
             playerCount++;
         }
+        playerCount -= 1;
 
-        isFirstHand = new boolean[3];
+        //isFirstHand = new boolean[3];
         for (int i = 0; i < 3; i++){
             isFirstHand[i] = true;
         }
@@ -43,7 +44,7 @@ public class gameServer {
         while(!isEnd){
             firstMsg = true;
             isTurnEnd = false;
-            for (int i = 0; i < playerCount - 1; i++){
+            for (int i = 0; i < playerCount; i++){
                 serverThreadlist.get(i).ps.println(printTurn());
             }
             serverThread st = serverThreadlist.get(handindex);
@@ -103,7 +104,7 @@ public class gameServer {
 
             }
             refreshTable();
-            isFirstHand[handindex] = false;
+
             goNext();
         }
 
@@ -138,7 +139,7 @@ public class gameServer {
     }
 
     public static void goNext(){
-        if (handindex == playerCount - 2){
+        if (handindex == playerCount - 1){
             handindex = 0;
         }else{
             handindex++;
@@ -146,7 +147,7 @@ public class gameServer {
     }
 
     public static void firstDraw(){
-        for (int i = 0; i < playerCount - 1; i++){
+        for (int i = 0; i < playerCount; i++){
             handcard.add(p.handCard());
         }
     }
@@ -197,7 +198,7 @@ public class gameServer {
             t.played = true;
             m.addTile(t);
         }
-        if (m.isValid()) {
+        if (m.isValid() && isInitialPass(m)) {
             shareTable.add(m);
             for (int i = 0; i < m.getSize(); i++){
                 removeFromHand(m.getTile(i));
@@ -205,8 +206,30 @@ public class gameServer {
         }
     }
 
+    public static boolean isInitialPass(meld m){
+        if (!isFirstHand[handindex]){
+            return true;
+        }else{
+            int sum = 0;
+            for (int i = 0; i < m.getSize(); i++){
+                sum += m.getTile(i).point;
+            }
+            if (sum >= 30){
+                isFirstHand[handindex] = false;
+                return true;
+            }else{
+                serverThreadlist.get(handindex).ps.println("insufficient total for initial tiles");
+                return false;
+            }
+        }
+    }
+
     public static boolean removeFromHand(tile t){
         for (int i = 0; i < handcard.get(handindex).size(); i++){
+            if (t.isJoker && handcard.get(handindex).get(i).isJoker){
+                handcard.get(handindex).remove(i);
+                return true;
+            }
             if (t.color == handcard.get(handindex).get(i).color && t.point == handcard.get(handindex).get(i).point){
                 handcard.get(handindex).remove(i);
                 return true;
@@ -275,8 +298,13 @@ public class gameServer {
                 content += winner + " is the winner of the game. \nFinal Score:\n";
             }else{
                 for (int j = 0; j < handcard.get(i).size(); j++){
-                    score[i] -= handcard.get(i).get(j).point;
-                    finalScore += handcard.get(i).get(j).point;
+                    if (handcard.get(i).get(j).isJoker){
+                        score[i] -= 30;
+                        finalScore += 30;
+                    } else {
+                        score[i] -= handcard.get(i).get(j).point;
+                        finalScore += handcard.get(i).get(j).point;
+                    }
                 }
             }
         }

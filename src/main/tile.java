@@ -5,6 +5,7 @@ public class tile {
     public int point;
     public boolean moved = false;
     public boolean played = false;
+    public boolean isJoker = false;
 
     public tile(char color, int point){
         this.color = color;
@@ -12,15 +13,21 @@ public class tile {
     }
 
     public tile(String t){
-        this.color = t.charAt(0);
-        String string = "";
-        for (int i = 1; i < t.length(); i++){
-            string += t.charAt(i);
-        }
-        try {
-            this.point = Integer.parseInt (string);
-        } catch (NumberFormatException npe) {
-            npe.printStackTrace();
+        if (t.equals("JR")){
+            this.color = 'J';
+            this.point = 0;
+            isJoker = true;
+        } else {
+            this.color = t.charAt(0);
+            String string = "";
+            for (int i = 1; i < t.length(); i++) {
+                string += t.charAt(i);
+            }
+            try {
+                this.point = Integer.parseInt(string);
+            } catch (NumberFormatException npe) {
+                npe.printStackTrace();
+            }
         }
     }
 
@@ -64,7 +71,11 @@ public class tile {
 
     @Override
     public String toString(){
-        return color + "" + point;
+        if (!isJoker){
+            return color + "" + point;
+        }else{
+            return "JR";
+        }
     }
 }
 

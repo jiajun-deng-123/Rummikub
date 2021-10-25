@@ -75,7 +75,6 @@ class gameServerTest {
         tile t = gs.p.get(14);
 
         gs.firstDraw();
-
         assertEquals(t.toString(), gs.p.get(0).toString());
     }
 
@@ -86,10 +85,16 @@ class gameServerTest {
         ts.add(new tile("R5"));
         ts.add(new tile("R2"));
         ts.add(new tile("R5"));
+        ts.add(new tile("JR"));
         ts.add(new tile("R1"));
         ts.add(new tile("R6"));
         gs.handindex = 0;
         gs.handcard.add(ts);
+
+        assertEquals("Your hand card:\n" +
+                "R5 R2 R5 JR R1 R6 ", gs.printHandCard());
+
+        gs.removeFromHand(new tile("JR"));
 
         assertEquals("Your hand card:\n" +
                 "R5 R2 R5 R1 R6 ", gs.printHandCard());
@@ -108,6 +113,7 @@ class gameServerTest {
     @Test
     public void testAddMeld(){
         gameServer gs = new gameServer();
+        gs.isFirstHand[0] = false;
         LinkedList<tile> ts = new LinkedList<tile>();
         ts.add(new tile("R5"));
         ts.add(new tile("R2"));
@@ -269,7 +275,7 @@ class gameServerTest {
     @Test
     public void testUIupdate(){
         gameServer gs = new gameServer();
-        gs.playerCount = 4;
+        gs.playerCount = 3;
         gs.handindex = 0;
         LinkedList<tile> hc1 = new LinkedList<tile>();
         hc1.add(new tile("B12"));
@@ -623,7 +629,7 @@ class gameServerTest {
     @Test
     public void testMeld1(){
         gameServer gs = new gameServer();
-        gs.playerCount = 4;
+        gs.playerCount = 3;
         gs.handindex = 0;
         LinkedList<tile> hc1 = new LinkedList<tile>();
         hc1.add(new tile("O11"));
@@ -669,7 +675,7 @@ class gameServerTest {
     @Test
     public void testMeld2(){
         gameServer gs = new gameServer();
-        gs.playerCount = 4;
+        gs.playerCount = 3;
         gs.handindex = 0;
         LinkedList<tile> hc1 = new LinkedList<tile>();
         hc1.add(new tile("O11"));
@@ -719,7 +725,7 @@ class gameServerTest {
     @Test
     public void testMeld3(){
         gameServer gs = new gameServer();
-        gs.playerCount = 4;
+        gs.playerCount = 3;
         gs.handindex = 0;
         LinkedList<tile> hc1 = new LinkedList<tile>();
         hc1.add(new tile("O11"));
@@ -765,7 +771,7 @@ class gameServerTest {
     @Test
     public void testMeld4(){
         gameServer gs = new gameServer();
-        gs.playerCount = 4;
+        gs.playerCount = 3;
         gs.handindex = 0;
         LinkedList<tile> hc1 = new LinkedList<tile>();
         hc1.add(new tile("O11"));
@@ -816,7 +822,7 @@ class gameServerTest {
     @Test
     public void testMeld5(){
         gameServer gs = new gameServer();
-        gs.playerCount = 4;
+        gs.playerCount = 3;
         gs.handindex = 0;
         LinkedList<tile> hc1 = new LinkedList<tile>();
         hc1.add(new tile("O11"));
@@ -866,7 +872,7 @@ class gameServerTest {
     @Test
     public void testMeld6(){
         gameServer gs = new gameServer();
-        gs.playerCount = 4;
+        gs.playerCount = 3;
         gs.handindex = 0;
         LinkedList<tile> hc1 = new LinkedList<tile>();
         hc1.add(new tile("O11"));

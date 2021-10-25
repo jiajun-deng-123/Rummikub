@@ -21,14 +21,15 @@ public class pool {
                         color = 'O';
                     }
                     pool.add(new tile(color, k));
-                    Collections.shuffle(pool);
                 }
             }
+            pool.add(new tile("JR"));
         }
+        Collections.shuffle(pool);
     }
 
     public LinkedList<tile> handCard(){
-        LinkedList<tile> res = new LinkedList();
+        LinkedList<tile> res = new LinkedList<tile>();
         for (int i = 0; i < 14; i++) {
             res.add(pool.remove(0));
         }

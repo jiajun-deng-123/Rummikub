@@ -21,6 +21,11 @@ class tileTest{
         assertEquals('B', t.color);
 
         assertEquals(12, t.point);
+
+        assertFalse(t.isJoker);
+
+        t = new tile("JR");
+        assertTrue(t.isJoker);
     }
 
     @Test
