@@ -26,5 +26,32 @@ public class StepDefCountScore extends TestCase {
         assertTrue(gs.isEnd);
     }
 
-    
+    @Given("Game has ended")
+    public void game_has_ended() {
+        gs.playerCount = 3;
+        gs.handcard = new LinkedList<LinkedList<tile>>();
+        for (int i = 0; i < 3; i++){
+            gs.handcard.add(new LinkedList<tile>());
+        }
+        gs.isEnd = true;
+    }
+
+    @Given("Player {int} has {string}")
+    public void player_has(Integer int1, String string) {
+        String[] str = string.split(" ");
+        String[] tiles = Arrays.stream(str)
+                .filter(value ->
+                        value != null && value.length() > 0
+                )
+                .toArray(size -> new String[size]);
+        for (int i = 0; i < tiles.length; i++){
+            gs.getHand(int1 - 1).add(new tile(tiles[i]));
+        }
+    }
+
+
+    @When("System counts the score")
+    public void system_counts_the_score() {
+        gs.countScore();
+    }
 }

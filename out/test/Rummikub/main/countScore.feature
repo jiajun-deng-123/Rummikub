@@ -20,3 +20,4 @@ Feature: When one player played all his card and end the game, system will count
       |t1|t2|t3|response|
       |R4|R6 R7 B10 R9||Game over. Player 3 is the winner of the game. \nFinal Score:\nPlayer 1 (-4)\nPlayer 2 (-32)\nPlayer 3 (36)\n|
       |R5 R8 G10||B9 O11 R1|Game over. Player 2 is the winner of the game. \nFinal Score:\nPlayer 1 (-23)\nPlayer 2 (44)\nPlayer 3 (-21)\n|
+
