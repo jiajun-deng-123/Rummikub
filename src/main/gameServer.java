@@ -32,7 +32,7 @@ public class gameServer {
             serverThreadlist.get(playerCount - 1).ps.println("You joined the game as Player " + playerCount);
             playerCount++;
         }
-        playerCount -= 1;
+        playerCount = 3;
 
         //isFirstHand = new boolean[3];
         for (int i = 0; i < 3; i++){
