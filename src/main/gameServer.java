@@ -257,7 +257,12 @@ public class gameServer {
             if (removeFromHand(t)){
                 t.played = true;
                 shareTable.get(m).addTile(t);
+                content = "A tile has been added to the meld";
+            }else{
+                content = "Please play a valid tile";
             }
+        }else{
+            content = "Please play a valid tile";
         }
     }
 
