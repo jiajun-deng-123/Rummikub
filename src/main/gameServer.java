@@ -16,6 +16,7 @@ public class gameServer {
     public static LinkedList<LinkedList<tile>> handcard = new LinkedList<LinkedList<tile>>();
     public static boolean isEnd = false;
     public static boolean isTurnEnd = false;
+    public static ServerSocket ss;
 
     public static void main(String[] args) throws Exception {
         handcard = new LinkedList<LinkedList<tile>>();

@@ -10,8 +10,9 @@ import java.util.LinkedList;
 
 public class myClient {
     static LinkedList<tile> handcard=new LinkedList<tile>();
+    static Socket socket;
     public static void main(String[] args) throws IOException {
-        Socket socket=new Socket();
+        socket=new Socket();
         socket.connect(new InetSocketAddress("127.0.0.1",30000),10000);
         new Thread(new ClientThread(socket)).start();
         PrintStream ps=new PrintStream(socket.getOutputStream());
