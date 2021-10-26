@@ -109,7 +109,6 @@ public class gameServer {
             goNext();
         }
 
-        content = countScore();
         for (int i = 0; i < playerCount; i++){
             serverThreadlist.get(i).ps.println(content);
         }
@@ -297,10 +296,10 @@ public class gameServer {
 
     public static String countScore(){
         int[] score = new int [playerCount];
-        String content = "Game over. Player ";
+        content = "Game over. Player ";
         int winner = 1;
         int finalScore = 0;
-        for (int i = 0; i < handcard.size(); i++){
+        for (int i = 0; i < 3; i++){
             if (handcard.get(i).size() == 0){
                 winner = i + 1;
                 content += winner + " is the winner of the game. \nFinal Score:\n";
@@ -317,7 +316,7 @@ public class gameServer {
             }
         }
         score[winner - 1] = finalScore;
-        for (int i = 0; i < handcard.size(); i++){
+        for (int i = 0; i < 3; i++){
             content += "Player " + (i + 1) +" (" + score[i] + ")\n";
         }
         return content;
