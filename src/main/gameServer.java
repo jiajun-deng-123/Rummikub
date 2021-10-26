@@ -16,13 +16,11 @@ public class gameServer {
     public static LinkedList<LinkedList<tile>> handcard = new LinkedList<LinkedList<tile>>();
     public static boolean isEnd = false;
     public static boolean isTurnEnd = false;
-    public static ServerSocket ss;
+    public static String content = "";
 
     public static void main(String[] args) throws Exception {
-        handcard = new LinkedList<LinkedList<tile>>();
         boolean firstMsg = true;
         String choice = "";
-        String content = "";
 
         ServerSocket ss = new ServerSocket(30000);
         while (list.size() < 3) {
@@ -76,9 +74,11 @@ public class gameServer {
                     st.ps.println(content);
                     choice = st.readFromSocket();
                     if (choice.equals("1")) {
+                        content = "";
                         st.ps.println("Please choose the tiles your want to play and split them with space: \n");
                         choice = st.readFromSocket();
                         addNewMeld(choice);
+                        serverThreadlist.get(handindex).ps.println(content);
                     }else if (choice.equals("2")){
                         isTurnEnd = true;
                     }else if (choice.equals("3")){
@@ -204,6 +204,7 @@ public class gameServer {
             for (int i = 0; i < m.getSize(); i++){
                 removeFromHand(m.getTile(i));
             }
+            content = "add meld successfully, handcard and table updated";
         }
     }
 
@@ -219,7 +220,8 @@ public class gameServer {
                 isFirstHand[handindex] = false;
                 return true;
             }else{
-                serverThreadlist.get(handindex).ps.println("insufficient total for initial tiles");
+
+                content = "insufficient total for initial tiles";
                 return false;
             }
         }
